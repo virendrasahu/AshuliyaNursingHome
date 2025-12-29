@@ -6,6 +6,7 @@ import WhyChooseUs from './sections/WhyChooseUs'
 import About from './sections/About'
 import Testimonials from './sections/Testimonials'
 import Contact from './sections/Contact'
+import MapSection from './sections/MapSection'
 import Footer from './components/Footer'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <About />
       <Testimonials />
       <Contact />
+      <MapSection />
       <Footer />
 
       {/* WhatsApp Floating Button */}
