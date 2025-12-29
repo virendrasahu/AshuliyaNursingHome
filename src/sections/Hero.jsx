@@ -1,7 +1,45 @@
-import { motion } from "framer-motion";
-import { Phone, Calendar, Heart, ShieldCheck, Activity, User } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Phone, Calendar, ShieldCheck, Activity, User, Star } from "lucide-react";
+import { useState, useEffect } from "react";
+import heroBg from '../assets/hero_bg_8k.png';
+import nurseImg1 from '../assets/nurse_young.png';
+import nurseImg2 from '../assets/nurse_feature.png';
+import nurseImg3 from '../assets/nurse_feature_2.png';
+
+const nurses = [
+    {
+        name: "Priya Sharma",
+        role: "Certified Caregiver",
+        image: nurseImg1,
+        experience: "3+ Years",
+        tag: "Young & Energetic"
+    },
+    {
+        name: "Neha Gupta",
+        role: "Junior Staff Nurse",
+        image: nurseImg2,
+        experience: "5+ Years",
+        tag: "Compassionate"
+    },
+    {
+        name: "Anjali Singh",
+        role: "Healthcare Assistant",
+        image: nurseImg3,
+        experience: "4+ Years",
+        tag: "Dedicated"
+    }
+];
 
 export default function Hero() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % nurses.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, []);
+
     const floatAnimation = {
         y: [0, -15, 0],
         transition: {
@@ -29,32 +67,12 @@ export default function Hero() {
             display: 'flex',
             alignItems: 'center',
             overflow: 'hidden',
-            background: 'radial-gradient(circle at 50% 50%, rgba(239, 246, 255, 0.8) 0%, rgba(248, 250, 252, 1) 100%)'
+            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(${heroBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            backgroundColor: '#F8FAFC'
         }}>
-            {/* Background Blobs (Keep unchanged) */}
-            <div style={{
-                position: 'absolute',
-                top: '-10%',
-                right: '-5%',
-                width: '500px',
-                height: '500px',
-                background: 'rgba(59, 130, 246, 0.05)',
-                borderRadius: '50%',
-                filter: 'blur(80px)',
-                zIndex: 0
-            }} />
-            <div style={{
-                position: 'absolute',
-                bottom: '-10%',
-                left: '-10%',
-                width: '600px',
-                height: '600px',
-                background: 'rgba(16, 185, 129, 0.05)',
-                borderRadius: '50%',
-                filter: 'blur(100px)',
-                zIndex: 0
-            }} />
-
             <div className="container" style={{ position: 'relative', zIndex: 1 }}>
                 <div className="row align-items-center gy-5">
                     {/* Left Content */}
@@ -108,7 +126,8 @@ export default function Hero() {
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '10px',
-                                        boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)'
+                                        boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.4)',
+                                        border: 'none'
                                     }}
                                     onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
                                 >
@@ -142,45 +161,86 @@ export default function Hero() {
 
                     {/* Right Visuals - Antigravity Floating Cards */}
                     <div className="col-lg-6">
-                        <div style={{ position: 'relative', height: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ position: 'relative', height: '550px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-                            {/* Main Character / Central Element (Abstract Representation) */}
+                            {/* Main Character / Central Element (Nurse Carousel) */}
                             <div style={{
                                 width: '100%',
-                                maxWidth: '400px',
-                                aspectRatio: '1/1',
+                                maxWidth: '300px',
+                                aspectRatio: '1/1.4',
                                 background: 'white',
-                                borderRadius: '40px',
+                                borderRadius: '32px',
                                 position: 'relative',
-                                boxShadow: 'var(--shadow-soft)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                zIndex: 1
+                                boxShadow: '0 40px 100px -10px rgba(0,0,0,0.3)',
+                                overflow: 'visible', // Changed for indicators
+                                zIndex: 1,
+                                transform: 'translateX(40px)',
+                                border: 'none'
                             }}>
-                                {/* Placeholder for an image - using an icon for now */}
-                                <div style={{ padding: '40px', textAlign: 'center' }}>
-                                    <div style={{ width: '120px', height: '120px', background: 'var(--primary-light)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-                                        <Heart size={60} color="var(--primary)" fill="var(--primary)" fillOpacity={0.2} />
-                                    </div>
-                                    <h3 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Compassionate Care</h3>
-                                    <p style={{ color: 'var(--text-body)' }}>Treating your loved ones like family.</p>
+                                <div style={{ height: '100%', overflow: 'hidden', borderRadius: '32px', position: 'relative' }}>
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={currentIndex}
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            transition={{ duration: 0.6 }}
+                                            style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                                        >
+                                            <div style={{ width: '100%', height: '72%', overflow: 'hidden', position: 'relative' }}>
+                                                <img
+                                                    src={nurses[currentIndex].image}
+                                                    alt={nurses[currentIndex].name}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                />
+                                                <div style={{ position: 'absolute', top: '15px', right: '15px' }}>
+                                                    <span style={{ fontSize: '0.7rem', background: 'rgba(255,255,255,0.9)', color: 'var(--primary)', padding: '5px 12px', borderRadius: '20px', fontWeight: 700, boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>{nurses[currentIndex].tag}</span>
+                                                </div>
+                                            </div>
+                                            <div style={{ padding: '18px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'white' }}>
+                                                <h3 style={{ fontSize: '1.2rem', marginBottom: '2px', color: 'var(--text-heading)', fontWeight: 800 }}>{nurses[currentIndex].name}</h3>
+                                                <p style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.85rem', marginBottom: '6px' }}>{nurses[currentIndex].role}</p>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    <div style={{ display: 'flex', gap: '2px' }}>
+                                                        {[1, 2, 3, 4, 5].map(star => <Star key={star} size={12} fill="#FACC15" color="#FACC15" />)}
+                                                    </div>
+                                                    <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 500 }}>{nurses[currentIndex].experience} exp.</span>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* Dot Indicators - Positioned inside container but at bottom */}
+                                <div style={{ position: 'absolute', bottom: '10px', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '6px', zIndex: 10 }}>
+                                    {nurses.map((_, i) => (
+                                        <div
+                                            key={i}
+                                            style={{
+                                                width: i === currentIndex ? '18px' : '6px',
+                                                height: '6px',
+                                                borderRadius: '3px',
+                                                background: i === currentIndex ? 'var(--primary)' : 'rgba(0,0,0,0.1)',
+                                                transition: 'all 0.3s ease'
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                             </div>
 
-                            {/* Floating Card 1 */}
+                            {/* Floating Card 1 - Shifted to avoid overlap */}
                             <motion.div
                                 animate={floatAnimation}
                                 className="glass-panel"
                                 style={{
                                     position: 'absolute',
-                                    top: '50px',
-                                    left: '-20px',
-                                    padding: '20px',
+                                    top: '40px',
+                                    left: '-30px',
+                                    padding: '16px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '12px',
-                                    width: '200px',
+                                    width: '180px',
                                     maxWidth: '90%',
                                     zIndex: 2
                                 }}
@@ -189,24 +249,24 @@ export default function Hero() {
                                     <Activity size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.85rem', color: '#64748B' }}>Vitals</div>
-                                    <div style={{ fontWeight: 700, color: '#0F172A' }}>Monitoring</div>
+                                    <div style={{ fontSize: '0.8rem', color: '#64748B' }}>Vitals</div>
+                                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.9rem' }}>Monitoring</div>
                                 </div>
                             </motion.div>
 
-                            {/* Floating Card 2 */}
+                            {/* Floating Card 2 - Adjusted position */}
                             <motion.div
                                 animate={floatAnimationDelayed}
                                 className="glass-panel"
                                 style={{
                                     position: 'absolute',
-                                    bottom: '80px',
-                                    right: '-10px',
-                                    padding: '20px',
+                                    bottom: '60px',
+                                    right: '-20px',
+                                    padding: '16px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '12px',
-                                    width: '220px',
+                                    width: '200px',
                                     maxWidth: '90%',
                                     zIndex: 2
                                 }}
@@ -215,31 +275,14 @@ export default function Hero() {
                                     <User size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.85rem', color: '#64748B' }}>Staff</div>
-                                    <div style={{ fontWeight: 700, color: '#0F172A' }}>Available 24/7</div>
+                                    <div style={{ fontSize: '0.8rem', color: '#64748B' }}>Staff</div>
+                                    <div style={{ fontWeight: 700, color: '#0F172A', fontSize: '0.9rem' }}>Available 24/7</div>
                                 </div>
                             </motion.div>
-
-                            {/* Floating Circle decoration */}
-                            <motion.div
-                                animate={{ y: [0, 30, 0] }}
-                                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                                style={{
-                                    position: 'absolute',
-                                    top: '20%',
-                                    right: '-20px',
-                                    width: '80px',
-                                    height: '80px',
-                                    borderRadius: '50%',
-                                    background: 'linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)',
-                                    zIndex: 0
-                                }}
-                            />
-
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    )
+    );
 }
